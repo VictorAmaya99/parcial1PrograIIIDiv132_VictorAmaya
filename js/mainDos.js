@@ -1,24 +1,3 @@
-
-/*========================================================
-    Array de objetos que contienen los productos con id, 
-    nombre, precio y una ruta img con la foto.
-==========================================================*/
-
-// const frutas = [
-//     {id: 1, nombre: "arandano", precio: 80, rutaImg: "img/arandano.jpg"},
-//     {id: 2, nombre: "banana", precio: 60, rutaImg: "img/banana.jpg"},
-//     {id: 3, nombre: "frambruesa", precio: 70, rutaImg: "img/frambruesa.jpg"},
-//     {id: 4, nombre: "frutilla", precio: 75, rutaImg: "img/frutillas.jpg"},
-//     {id: 5, nombre: "kiwi", precio: 90, rutaImg: "img/kiwi.jpg"},
-//     {id: 6, nombre: "mandarina", precio: 120, rutaImg: "img/mandarina.jpg"},
-//     {id: 7, nombre: "manzana", precio: 110, rutaImg: "img/manzana.jpg"},
-//     {id: 8, nombre: "naranja", precio: 95, rutaImg: "img/naranja.jpg"},
-//     {id: 9, nombre: "pera", precio: 100, rutaImg: "img/pera.jpg"},
-//     {id: 10, nombre: "anana", precio: 85, rutaImg: "img/anana.jpg"},
-//     {id: 11, nombre: "pomelo-amarillo", precio: 130, rutaImg: "img/pomelo-amarillo.jpg"},
-//     {id: 12, nombre: "pomelo-rojo", precio: 140, rutaImg: "img/pomelo-rojo.jpg"}   
-// ];
-
 /*========================================================
     Array de objetos con mis datos para ser incluidos en 
     el nav de la pagina
@@ -32,7 +11,7 @@ const alumno = [
     Variables del DOM
 ==========================================================*/
 
-let frutas = [];
+let productos = [];
 
 let imprimirDatos = document.querySelector("#datosAlumno");
 let contenedorProductos = document.querySelector("#contenedorProductos")
@@ -51,14 +30,21 @@ let carrito = [];
     Funcion async para cargar los productos
 ==========================================================*/
 
-async function cargarFrutas() {
+async function cargarProductos() {
     try {
-        let response = await fetch("frutas.json");
-        frutas = await response.json();
-        mostrarProductos(frutas);
-        console.table(frutas);
+        let response = await fetch('https://dummyjson.com/products/search?q=phone');
+        if(!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+
+        productos = data.products;
+
+        mostrarProductos(productos);
+        console.table(productos);
     } catch (error) {
         console.error(error);
+        contenedorProductos.innerHTML = "<p>Error al cargar productos. Revisa la consola.</p>";
     }
 }
 
@@ -88,9 +74,9 @@ function mostrarProductos(array){
     array.forEach(a => {
         cardProducto += `
         <div class="card-producto">
-            <img src="${a.rutaImg}" alt="${a.nombre}">
-            <h3>${a.nombre}</h3>
-            <p>$${a.precio}</p>
+            <img src="${a.images[0]}" alt="${a.title}">
+            <h3>${a.title}</h3>
+            <p>$${a.price}</p>
             <button onclick="agregarItemCarrito(${a.id})">Agregar al carrito</button>
         </div>
         `;
@@ -108,7 +94,7 @@ barraBusqueda.addEventListener("keyup", filtrarProd);
 function filtrarProd(){
     let busqueda = barraBusqueda.value.trim().toLocaleLowerCase();
 
-    prodFiltrados = frutas.filter(f => f.nombre.toLocaleLowerCase().includes(busqueda));
+    prodFiltrados = productos.filter(f => f.title.toLocaleLowerCase().includes(busqueda));
 
     mostrarProductos(prodFiltrados);
 }
@@ -118,7 +104,7 @@ function filtrarProd(){
 ==========================================================*/
 
 function agregarItemCarrito(id){
-    let prodSelected = frutas.find(f => f.id === id);
+    let prodSelected = productos.find(f => f.id === id);
     carrito.push(prodSelected);
 
     console.table(prodSelected);
@@ -140,7 +126,7 @@ function visualizarCarrito(){
     carrito.forEach((e, indice) =>{          
         cardCarrito += `        
         <li class="bloque-item">
-            <p class="nombre-item">${e.nombre} - ${e.precio}</p>
+            <p class="nombre-item">${e.title} - ${e.price}</p>
             <button class="boton-eliminar" onclick="eliminarProducto(${indice})">Eliminar</button>
         </li>
         `;
@@ -159,7 +145,7 @@ function visualizarCarrito(){
 
 function vaciarPrecioTotal(){
     //usamos reduce para sumar el precio y presentar el total
-    let total = carrito.reduce((acc, prod) => acc + prod.precio, 0);
+    let total = carrito.reduce((acc, prod) => acc + prod.price, 0);
 
     // inicialiamos en 0 para aparezca cuando hay un producto
     if(carrito.length > 0){
@@ -235,13 +221,13 @@ ordenarPorNombre.addEventListener("click", ordenarNombre);
 ordenarPorPrecio.addEventListener("click", ordenarPrecioDesc);
 
 function ordenarPrecioDesc(){
-    frutas.sort((a, b) => a.precio - b.precio);
-    mostrarProductos(frutas);
+    productos.sort((a, b) => a.price - b.price);
+    mostrarProductos(productos);
 }
 
 function ordenarNombre(){
-    frutas.sort((a, b) => a.nombre.localeCompare(b.nombre));
-    mostrarProductos(frutas);
+    productos.sort((a, b) => a.title.localeCompare(b.title));
+    mostrarProductos(productos);
 }
 
 /*========================================================
@@ -264,7 +250,7 @@ function vaciarCarrito(){
 async function init(){
     imprimirDatosAlumno();
     loadLocalStorage();
-    await cargarFrutas()
+    await cargarProductos()
     // mostrarProductos(frutas);
     visualizarCarrito();
     contadorProd();

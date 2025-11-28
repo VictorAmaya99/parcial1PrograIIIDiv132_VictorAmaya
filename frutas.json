@@ -1,0 +1,15 @@
+[
+    {"id": 1, "nombre": "arandano", "precio": 80, "rutaImg": "img/arandano.jpg"},
+    {"id": 2, "nombre": "banana", "precio": 60, "rutaImg": "img/banana.jpg"},
+    {"id": 3, "nombre": "frambruesa", "precio": 70, "rutaImg": "img/frambruesa.jpg"},
+    {"id": 4, "nombre": "frutilla", "precio": 75, "rutaImg": "img/frutillas.jpg"},
+    {"id": 5, "nombre": "kiwi", "precio": 90, "rutaImg": "img/kiwi.jpg"},
+    {"id": 6, "nombre": "mandarina", "precio": 120, "rutaImg": "img/mandarina.jpg"},
+    {"id": 7, "nombre": "manzana", "precio": 110, "rutaImg": "img/manzana.jpg"},
+    {"id": 8, "nombre": "naranja", "precio": 95, "rutaImg": "img/naranja.jpg"},
+    {"id": 9, "nombre": "pera", "precio": 100, "rutaImg": "img/pera.jpg"},
+    {"id": 10, "nombre": "anana", "precio": 85, "rutaImg": "img/anana.jpg"},
+    {"id": 11, "nombre": "pomelo-amarillo", "precio": 130, "rutaImg": "img/pomelo-amarillo.jpg"},
+    {"id": 12, "nombre": "pomelo-rojo", "precio": 140, "rutaImg": "img/pomelo-rojo.jpg"}   
+]
+
